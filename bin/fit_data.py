@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+# In[ ]:
+
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,20 +11,35 @@ from   astropy.io import fits
 import os
 import argparse
 
+
+# In[ ]:
+
+
 parser = argparse.ArgumentParser(description="K8s toy model")
-parser.add_argument("--run_id", default=None, type=int, required=True)
+parser.add_argument("--run_id", default=None, type=str, required=True)
 parser.add_argument("--data_dir", default=None, type=str, required=True)
 parser.add_argument("--output_dir", default=None, type=str, required=True)
 
 args = parser.parse_args()
 
-run_id = args.run_id
+run_id = int(args.run_id)
 data_dir = args.data_dir
 output_dir = args.output_dir
 
 
+# In[ ]:
+
+
+#run_id = 3
+#data_dir = '/Users/research/projects/k8s-test/data/'
+#output_dir = '/Users/research/projects/k8s-test/results/'
+
+
+# In[ ]:
+
+
 # load data and run linear regression
-fname = data_dir + 'data_{0}.txt'.format(str(run_id).zfill(3))
+fname = os.path.join(data_dir, 'data_{0}.txt'.format(str(run_id).zfill(3)))
 data = np.loadtxt(fname).T
 x, y = data
 
@@ -34,6 +51,10 @@ with pm.Model() as model:
     
 with model:
     trace = pm.sample(chains=2, tune=1000, draws=1000)
+
+
+# In[ ]:
+
 
 # output posterior chains as .fits file
 primary_hdu = fits.PrimaryHDU()
@@ -52,8 +73,13 @@ hdulist.append(fits.ImageHDU(np.array(trace.posterior.b), name='B'))
 
 hdulist = fits.HDUList(hdulist)
 
-os.makedirs(output_dir, exist_ok=True)
+fname = os.path.join(output_dir, 'results_{0}.fits'.format(str(run_id).zfill(3)))
 
-fname = output_dir + 'data_{0}.txt'.format(str(run_id).zfill(3))
-data = np.loadtxt(fname).T
-x, y = data
+hdulist.writeto(fname)
+
+
+# In[ ]:
+
+
+
+
