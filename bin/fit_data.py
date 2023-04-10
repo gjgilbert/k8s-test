@@ -73,6 +73,7 @@ hdulist.append(fits.ImageHDU(np.array(trace.posterior.b), name='B'))
 
 hdulist = fits.HDUList(hdulist)
 
+os.makedirs(output_dir, exist_ok=True)
 fname = os.path.join(output_dir, 'results_{0}.fits'.format(str(run_id).zfill(3)))
 
 hdulist.writeto(fname)
