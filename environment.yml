@@ -1,0 +1,11 @@
+channels:
+  - conda-forge
+dependencies:
+  - numpy
+  - matplotlib
+  - pandas
+  - astropy
+  - python=3.9.7
+  - pip
+  - pip:
+    - pymc
