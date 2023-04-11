@@ -73,9 +73,7 @@ if __name__ == '__main__':
 
     hdulist = fits.HDUList(hdulist)
     
-    obs = pm.Normal("obs", m*x + b, observed=y)
-    
-    os.mkdirs(output_dir, exist_ok=True)
+    os.makedirs(output_dir, exist_ok=True)
     fname = os.path.join(output_dir, 'results_{0}.fits'.format(str(run_id).zfill(3)))
 
     hdulist.writeto(fname, overwrite=True)
